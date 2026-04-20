@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta charset="UTF-8">
+    
+    <title>FlashPack | {% block title %}{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        :root {
+            --flash-blue: #0f172a;
+            --flash-orange: #e67e22;
+        }
+        body {
+            margin: 0;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #f8fafc;
+            color: #1e293b;
+        }
+
+/* --- STYLE GÉNÉRAL (PC) --- */
+.panier-grid {
+    display: grid;
+    grid-template-columns: 1fr 380px; /* Deux colonnes sur PC */
+    gap: 40px;
+    align-items: start;
+}
+
+/* --- STYLE MOBILE (Le secret pour que ça ne soit plus "nul") --- */
+@media (max-width: 768px) {
+    .panier-grid {
+        grid-template-columns: 1fr !important; /* On force UNE SEULE colonne sur mobile */
+        gap: 20px;
+    }
+
+    /* On réduit la taille du titre pour mobile */
+    h1 {
+        font-size: 1.5rem !important;
+        text-align: center;
+    }
+
+    /* On s'assure que le menu (navbar) est compact */
+    nav {
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+
+    nav .links {
+        display: flex;
+        gap: 10px; /* Petit espace entre Accueil, Boutique, Panier */
+        font-size: 0.9rem;
+        margin-top: 10px;
+    }
+}
+
+ /* --- CONFIGURATION RESPONSIVE TOTALE --- */
+@media (max-width: 768px) {
+    /* 1. RESET GLOBAL : Empêche tout mouvement bizarre à droite */
+    html, body {
+        overflow-x: hidden;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+    }
+
+    /* 2. NAVBAR COMPACTE : On empile logo, liens et boutons */
+    nav {
+        flex-direction: column !important;
+        height: auto !important;
+        padding: 15px 10px !important;
+        gap: 12px !important;
+        align-items: center !important;
+    }
+
+    .brand-name, nav h1 {
+        font-size: 1.1rem !important;
+        margin: 0 !important;
+        text-align: center;
+    }
+
+    /* Les liens Accueil/Boutique/Panier bien rangés */
+    nav div:nth-of-type(1), .nav-links {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: center !important;
+        gap: 15px !important;
+        width: 100% !important;
+    }
+
+    nav a { font-size: 0.85rem !important; }
+
+    /* Fix Déconnexion / Bonjour */
+    nav div[style*="display: flex"]:last-child {
+        flex-direction: column !important;
+        gap: 8px !important;
+        width: 100% !important;
+        border-top: 1px solid rgba(255,255,255,0.1);
+        padding-top: 10px !important;
+    }
+
+    .btn-logout, a[href="/logout"], .btn-account {
+        width: 150px !important;
+        margin: 0 auto !important;
+        text-align: center;
+        padding: 8px !important;
+        font-size: 0.8rem !important;
+    }
+
+    /* 3. PAGES (Boutique, Panier, Compte) : Tout en une seule colonne */
+    .produits-grid, .panier-grid, .panier-wrapper, .cart-container, div[style*="display: grid"] {
+        display: flex !important;
+        flex-direction: column !important;
+        grid-template-columns: 1fr !important;
+        gap: 20px !important;
+        width: 100% !important;
+        padding: 10px !important;
+    }
+
+    /* On force les containers de 1200px à faire 100% */
+    div[style*="max-width: 1200px"], .container {
+        max-width: 100% !important;
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 10px !important;
+        box-sizing: border-box !important;
+    }
+
+    /* 4. FORMULAIRES (Connexion/Inscription) : Fix des champs qui sortent */
+    input, select, textarea {
+        width: 100% !important;
+        max-width: 100% !important;
+        box-sizing: border-box !important; /* Inclus le padding dans la largeur */
+        margin: 10px 0 !important;
+    }
+
+    /* 5. FICHE PRODUIT : Fix prix et bouton Ajouter */
+    .product-actions, div[style*="align-items: center"] {
+        flex-direction: column !important;
+        gap: 15px !important;
+    }
+
+    button[style*="background: #e67e22"], .btn-add-to-cart {
+        width: 100% !important;
+        padding: 18px !important;
+        font-size: 1.1rem !important;
+    }
+
+    /* Titres plus adaptés */
+    h1 { font-size: 1.5rem !important; text-align: center !important; }
+}
+
+
+
+
+/* --- FIX GLOBAL POUR LES GRILLES DE PRODUITS (Boutique/Accueil) --- */
+
+/* 1. On cible l'image DANS n'importe quelle carte de produit */
+/* J'utilise des sélecteurs larges pour être sûr de l'attraper */
+div[class*="card"] img, .produit-card img, .product-card img, [style*="display: grid"] img {
+    width: 100% !important; /* Prend toute la largeur de son cadre blanc */
+    max-width: 100% !important;
+    height: 200px !important; /* Force une HAUTEUR UNIFORME pour toutes les photos (important pour aligner la grille) */
+    object-fit: contain !important; /* Le secret : fit tout le contenu sans couper, sans déformer, en gardant les proportions */
+    display: block !important;
+    margin: 0 auto 15px auto !important; /* Centre l'image et ajoute un petit espace en dessous */
+    padding: 10px; /* Un peu d'air pour les photos collées au bord */
+    box-sizing: border-box;
+}
+
+/* 2. On s'assure que la carte elle-même ne déborde pas */
+.produit-card, [style*="background: white"] {
+    overflow: hidden !important; /* Cache tout ce qui essaie de dépasser de la carte blanche */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Aligne le bouton tout en bas */
+}
+
+/* Ajustement Mobile pour la grille */
+@media (max-width: 768px) {
+    div[class*="card"] img, .produit-card img {
+        height: 150px !important; /* Plus petit sur mobile pour que ça reste joli */
+    }
+}
+    </style>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/logo.png') }}">
+</head>
+<body>
+
+    <header style="background: var(--flash-blue); padding: 10px 5%; position: sticky; top: 0; z-index: 1000; box-shadow: 0 4px 20px rgba(0,0,0,0.1);">
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center;">
+            
+            <div class="logo">
+                <a href="/" style="display: flex; align-items: center; text-decoration: none;">
+                    <img src="{{ url_for('static', filename='images/logo.png') }}" 
+                         alt="FlashPack Logo" 
+                         style="height: 75px; width: auto; display: block; object-fit: contain;">
+                    <span style="color: white; font-weight: 800; font-size: 1.5rem; margin-left: 10px;">
+                        FlashPack<span style="color: var(--flash-orange);">TN</span>
+                    </span>
+                </a>
+            </div>
+
+            <nav style="display: flex; gap: 30px; align-items: center;">
+                <a href="/" style="color: white; text-decoration: none; font-weight: 600; transition: 0.3s;">Accueil</a>
+                <a href="/boutique" style="color: white; text-decoration: none; font-weight: 600; transition: 0.3s;">Boutique</a>
+                <a href="/panier" style="color: white; text-decoration: none; font-weight: 600; transition: 0.3s;">Panier 🛒</a>
+                
+                {% if session.get('nom') %}
+                    <div style="display: flex; align-items: center; gap: 15px;">
+                        <span style="color: white; font-size: 0.9rem;">Bonjour, <strong>{{ session.nom }}</strong></span>
+                        <a href="/logout" style="color: var(--flash-orange); text-decoration: none; font-weight: bold; font-size: 0.9rem; border: 1px solid var(--flash-orange); padding: 5px 10px; border-radius: 5px;">Déconnexion</a>
+                    </div>
+                {% else %}
+                    <a href="/compte" style="background: var(--flash-orange); color: white; padding: 10px 25px; border-radius: 8px; text-decoration: none; font-weight: 700; transition: 0.3s; box-shadow: 0 4px 10px rgba(230, 126, 34, 0.3);">Mon Compte</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer style="background: #0f172a; color: #64748b; padding: 40px 5%; text-align: center; border-top: 1px solid rgba(255,255,255,0.1);">
+        <p>&copy; 2026 FlashPack TN. Tous droits réservés. <br> Expertise en emballage industriel et e-commerce.</p>
+    </footer>
+
+</body>
+</html>
