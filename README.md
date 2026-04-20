@@ -1,41 +1,61 @@
-# FlashPackTN 🚀
+# 🚀 FlashPackTN – E-commerce Packaging Platform
 
-FlashPackTN is a web platform designed to showcase packaging solutions for e-commerce and industrial businesses.
+FlashPackTN is a full-stack web application developed using Flask to showcase packaging solutions for e-commerce and industrial businesses in Tunisia.
 
-## 📦 Features
-- Product catalog (Boutique)
-- Product detail pages with options
-- Shopping cart system
-- Order confirmation flow
-- Admin dashboard interface
+---
 
-## 🛠️ Technologies
-- HTML
-- CSS
+## 📌 Project Overview
+FlashPackTN simulates a real e-commerce platform for packaging products, including product browsing, detailed product pages, cart system, and order confirmation flow.
+
+---
+
+## 🛠️ Technologies Used
+- Python (Flask)
+- Jinja2 Templates
+- HTML5
+- CSS3
 - JavaScript
+
+---
+
+## ⚙️ Features
+- 🏠 Landing page with modern UI
+- 🛍️ Product catalog (Boutique)
+- 📄 Product detail pages with customization options
+- 🛒 Shopping cart system
+- ✅ Order confirmation workflow
+- ⚙️ Admin dashboard interface
+
+---
+
+## 🧠 What I Learned
+- Backend development with Flask
+- Template rendering using Jinja2
+- Front-end integration (HTML/CSS/JS)
+- Building full user flow applications
+- UI/UX structuring for e-commerce systems
+
+---
 
 ## 🖼️ Screenshots
 
-### 🏠 Home Page
+### Home Page
 ![Home](screenshots/accueil.png)
 
-### 🛍️ Boutique
-![Boutique](screenshots/boutique.png)
+### Boutique
+![Shop](screenshots/boutique.png)
 
-### 📄 Product Page
+### Product Page
 ![Product](screenshots/produit.png)
 
-### 🛒 Cart
+### Cart
 ![Cart](screenshots/panier.png)
 
-### ✅ Confirmation
-![Confirmation](screenshots/confirmation.png)
-
-### ⚙️ Admin Dashboard
+### Admin Panel
 ![Admin](screenshots/admin.png)
 
-## 🎯 Project Goal
-This project simulates a real e-commerce platform, focusing on user experience, product presentation, and interaction.
+---
 
 ## 👨‍💻 Author
 Hedfi Ahmed Aziz
+Computer Science Student | Aspiring Software Engineer
