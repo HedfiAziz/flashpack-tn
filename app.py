@@ -297,8 +297,8 @@ def valider_commande():
     # --- 🤖 MINI-FONCTION TELEGRAM CACHÉE ICI POUR FAIRE SIMPLE ---
     def envoyer_notif_telegram(commande_id, client_nom, client_tel, details, total):
         # Mets tes vrais codes ici entre les guillemets 👇
-        TOKEN = "8670391374:AAGo34UMU6zpJvf8eurtEN1xKVg3NfuVKYQ" 
-        CHAT_ID = "7102761055"
+        TOKEN = "xxx" 
+        CHAT_ID = "xxxx"
         
         message = (
             f"🚨 NOUVELLE COMMANDE ! 🚨\n\n"
