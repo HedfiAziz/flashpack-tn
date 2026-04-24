@@ -1,5 +1,5 @@
 <div align="center">
-  <img src=logo.png alt="Logo FlashPack TN" width="200"/>
+  <img src=static/images/logo.png alt="Logo FlashPack TN" width="200"/>
 
   # ⚡ FlashPack TN 
   **Plateforme E-commerce de Packaging Premium & Sur-Mesure**
