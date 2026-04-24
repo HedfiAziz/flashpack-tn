@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Boutique Pro | FlashPack TN{% endblock %}
+
+{% block content %}
+<style>
+    .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 30px; padding: 40px 0; }
+    .glass-card { 
+        background: white; border-radius: 24px; padding: 25px; transition: all 0.4s ease; 
+        border: 1px solid #eee; display: flex; flex-direction: column; justify-content: space-between;
+    }
+    .glass-card:hover { transform: translateY(-10px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); border-color: var(--flash-orange); }
+    .price-tag { font-size: 1.5rem; font-weight: 900; color: var(--flash-blue); }
+    .btn-details { 
+        background: #f1f5f9; color: #1e293b; padding: 12px; border-radius: 12px; 
+        text-decoration: none; text-align: center; font-weight: 700; transition: 0.3s;
+    }
+    .btn-details:hover { background: var(--flash-blue); color: white; }
+</style>
+
+<div style="background: #0f172a; padding: 80px 5%; color: white; position: relative; overflow: hidden;">
+    <div style="position: absolute; width: 300px; height: 300px; background: var(--flash-blue); filter: blur(100px); top: -100px; right: -50px; opacity: 0.3;"></div>
+    <div style="position: relative; z-index: 1;">
+        <h1 style="font-size: 3rem; font-weight: 900; margin-bottom: 10px;">Solutions d'Emballage <span style="color: var(--flash-orange);">Industriel</span></h1>
+        <p style="color: #94a3b8; font-size: 1.2rem;">Équipez votre logistique avec le meilleur du marché tunisien.</p>
+    </div>
+</div>
+
+<div class="container" style="padding: 50px 20px;">
+    <div class="product-grid">
+        {% for id, produit in produits.items() %}
+        <div class="glass-card">
+            <div>
+                <div style="background: #f8fafc; border-radius: 18px; padding: 20px; margin-bottom: 20px; text-align: center;">
+                    <img src="{{ url_for('static', filename='images/' + produit.image) }}" alt="{{ produit.nom }}" style="height: 200px; object-fit: contain;">
+                </div>
+                <h3 style="font-size: 1.4rem; color: #1e293b; margin-bottom: 10px;">{{ produit.nom }}</h3>
+                <p style="color: #64748b; font-size: 0.95rem; line-height: 1.5; margin-bottom: 20px;">{{ produit.description }}</p>
+            </div>
+            
+            <div>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <span class="price-tag">{{ produit.prix }}</span>
+                    <span style="font-size: 0.8rem; color: #94a3b8; font-weight: 600;">HT / Unité</span>
+                </div>
+                <a href="/produit/{{ id }}" class="btn-details">Voir la fiche technique →</a>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

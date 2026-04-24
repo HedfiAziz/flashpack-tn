@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+{% block title %}Dashboard Admin | FlashPack TN{% endblock %}
+
+{% block content %}
+<style>
+    .stock-low { background-color: #fee2e2; color: #991b1b; }
+    .stock-ok { background-color: #dcfce7; color: #166534; }
+</style>
+<div style="padding: 40px 5%; max-width: 1400px; margin: 0 auto;">
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px;">
+        <h1 style="color: var(--flash-blue); margin: 0;">⚙️ Espace Administrateur</h1>
+        
+        <div style="display: flex; gap: 15px;">
+            <a href="/admin/ajouter_produit" style="color: white; text-decoration: none; font-weight: bold; padding: 10px 15px; background: #10b981; border-radius: 8px;">+ Nouveau Produit</a>
+            <a href="/" style="color: #64748b; text-decoration: none; font-weight: bold; padding: 10px 15px; background: #f1f5f9; border-radius: 8px;">🏠 Boutique</a>
+            <a href="/admin_logout" style="color: white; text-decoration: none; font-weight: bold; background: #ef4444; padding: 10px 15px; border-radius: 8px;">🚪 Déconnexion</a>
+        </div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 40px;">
+        <div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-left: 5px solid var(--flash-blue);">
+            <p style="margin: 0; color: #64748b; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Total Commandes</p>
+            <h2 style="margin: 10px 0 0 0; font-size: 2rem; color: #0f172a;">{{ commandes|length }}</h2>
+        </div>
+        
+        <div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-left: 5px solid var(--flash-orange);">
+            <p style="margin: 0; color: #64748b; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Chiffre d'Affaires</p>
+            <h2 style="margin: 10px 0 0 0; font-size: 2rem; color: #ea580c;">{{ "%.3f"|format(ca) }} DT</h2>
+        </div>
+
+        <div style="background: white; padding: 25px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); border-left: 5px solid #10b981;">
+            <p style="margin: 0; color: #64748b; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px;">Clients Enregistrés</p>
+            <h2 style="margin: 10px 0 0 0; font-size: 2rem; color: #0f172a;">{{ total_clients }}</h2>
+        </div>
+    </div>
+
+    <div style="background: white; padding: 20px; border-radius: 15px; margin-bottom: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.05);">
+        <canvas id="myChart" height="100"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+    const ctx = document.getElementById('myChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
+            datasets: [{
+                label: 'Ventes (DT)',
+                data: [120, 190, 300, 250, 400, 550, 320], 
+                borderColor: '#ea580c',
+                tension: 0.4,
+                fill: true,
+                backgroundColor: 'rgba(234, 88, 12, 0.1)'
+            }]
+        }
+    });
+    </script>
+
+    <div style="background: white; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); overflow: hidden; margin-bottom: 40px;">
+        <div style="padding: 20px 30px; background: #1e293b; color: white;">
+            <h2 style="margin: 0; font-size: 1.2rem;">📦 Gestion de l'Inventaire & Stocks</h2>
+        </div>
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead>
+                    <tr style="background: #f8fafc; color: #475569; font-size: 0.9rem; border-bottom: 2px solid #e2e8f0;">
+                        <th style="padding: 15px 20px;">Produit</th>
+                        <th style="padding: 15px 20px; text-align: center;">Stock Actuel</th>
+                        <th style="padding: 15px 20px; text-align: center;">Prix Unitaire</th>
+                        <th style="padding: 15px 20px; text-align: center;">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for p in Produit.query.all() %}
+                    {% set bg_color = '#fee2e2' if p.stock < 5 else '#dcfce7' %}
+                    {% set text_color = '#991b1b' if p.stock < 5 else '#166534' %}
+                    
+                    <tr style="border-bottom: 1px solid #e2e8f0;">
+                        <td style="padding: 15px 20px;"><strong>{{ p.nom }}</strong></td>
+                        <td style="padding: 15px 20px; text-align: center;">
+                            <span class="{% if p.stock < 5 %}stock-low{% else %}stock-ok{% endif %}" 
+                                  style="padding: 5px 12px; border-radius: 20px; font-weight: bold; font-size: 0.85rem;">
+                                {{ p.stock }} unités
+                            </span>
+                        </td>
+                        <td style="padding: 15px 20px; text-align: center; color: #475569;">{{ p.prix_display }}</td>
+                        <td style="padding: 15px 20px; text-align: center;">
+                            <a href="/admin/modifier_produit/{{ p.id }}" style="background: var(--flash-blue); color: white; padding: 8px 12px; border-radius: 8px; text-decoration: none; font-size: 0.9rem; margin-right: 5px;">✏️ Modifier</a>
+                            <a href="/admin/supprimer_produit/{{ p.id }}" 
+                               onclick="return confirm('Attention ! Êtes-vous sûr de vouloir supprimer définitivement le produit : {{ p.nom }} ?');" 
+                               style="background: #ef4444; color: white; padding: 8px 12px; border-radius: 8px; text-decoration: none; font-size: 0.9rem;">
+                               🗑️ Supprimer
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div style="display: flex; justify-content: flex-end; margin-bottom: 15px;">
+        <a href="/admin/export" style="background-color: #10b981; color: white; padding: 12px 20px; text-decoration: none; border-radius: 8px; font-weight: bold; display: inline-flex; align-items: center; gap: 8px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: background 0.3s;" onmouseover="this.style.backgroundColor='#059669'" onmouseout="this.style.backgroundColor='#10b981'">
+            📥 Télécharger les commandes (Excel)
+        </a>
+    </div>
+
+    <div style="background: white; border-radius: 20px; box-shadow: 0 5px 20px rgba(0,0,0,0.05); overflow: hidden;">
+        <div style="padding: 20px 30px; background: #0f172a; color: white;">
+            <h2 style="margin: 0; font-size: 1.2rem;">🛒 Dernières Commandes</h2>
+        </div>
+        
+        <div style="overflow-x: auto;">
+            <table style="width: 100%; border-collapse: collapse; text-align: left;">
+                <thead>
+                    <tr style="background: #f8fafc; color: #475569; font-size: 0.9rem; border-bottom: 2px solid #e2e8f0;">
+                        <th style="padding: 15px 20px;">N°</th>
+                        <th style="padding: 15px 20px;">Date</th>
+                        <th style="padding: 15px 20px;">Client & Contact</th>
+                        <th style="padding: 15px 20px;">Produits (Panier)</th>
+                        <th style="padding: 15px 20px;">Total TTC</th>
+                        <th style="padding: 15px 20px;">Statut</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cmd in commandes %}
+                    
+                    <tr style="border-bottom: 1px solid #e2e8f0; transition: 0.2s;" >
+                        <td style="padding: 15px 20px; font-weight: bold; color: var(--flash-blue);">#{{ cmd.id }}</td>
+                        <td style="padding: 15px 20px; color: #64748b; font-size: 0.9rem;">{{ cmd.date_commande.strftime('%d/%m/%Y %H:%M') }}</td>
+                        <td style="padding: 15px 20px;">
+                            <strong>{{ cmd.client.nom }}</strong><br>
+                            <span style="color: #64748b; font-size: 0.9rem;">📞 {{ cmd.client.tel }}</span><br>
+                            <span style="color: #64748b; font-size: 0.9rem;">🏠 {{ cmd.client.adresse }}</span>
+                        </td>
+                        <td style="padding: 15px 20px; color: #334155; font-size: 0.95rem;">
+                            {{ cmd.details_panier }}
+                        </td>
+                        <td style="padding: 15px 20px; font-weight: bold; color: var(--flash-orange);">
+                            {{ "%.3f"|format(cmd.total_ttc) }} DT
+                        </td>
+                        <td style="padding: 15px 20px;">
+                            <select onchange="location = this.value;" style="padding: 8px; border-radius: 8px; border: 1px solid #e2e8f0; background: white; cursor: pointer; font-size: 0.85rem; margin-bottom: 10px; display: block; width: 100%;">
+                                <option value="" selected disabled>{{ cmd.statut_livraison }}</option>
+                                <option value="/update_statut/{{ cmd.id }}/Préparation">🕒 Préparation</option>
+                                <option value="/update_statut/{{ cmd.id }}/Expédiée">🚚 Expédiée</option>
+                                <option value="/update_statut/{{ cmd.id }}/Livrée">✅ Livrée</option>
+                                <option value="/update_statut/{{ cmd.id }}/Annulée">❌ Annulée</option>
+                            </select>
+
+                            <a href="{{ url_for('admin_supprimer_commande', id=cmd.id) }}" 
+                               style="color: white; background-color: #ef4444; padding: 6px 12px; text-decoration: none; border-radius: 8px; font-size: 0.85rem; display: inline-block; text-align: center; width: calc(100% - 24px);" 
+                               onclick="return confirm('Es-tu sûr de vouloir supprimer cette commande définitivement ?');">
+                                🗑️ Supprimer
+                            </a>
+                        </td>
+                    </tr>
+                    
+                    {% else %}
+                    <tr>
+                        <td colspan="6" style="padding: 30px; text-align: center; color: #64748b;">Aucune commande pour le moment.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    document.querySelectorAll('td').forEach(td => {
+        if(td.innerHTML.includes('[Fichier:')) {
+            td.innerHTML = td.innerHTML.replace(/\[Fichier:\s([^\]]+)\]/g, 
+            '<br><a href="/static/uploads/$1" target="_blank" style="display: inline-block; background: #0ea5e9; color: white; padding: 5px 10px; border-radius: 6px; text-decoration: none; font-size: 0.85rem; font-weight: bold; margin-top: 8px; box-shadow: 0 2px 5px rgba(14, 165, 233, 0.3);">📥 Voir le design</a>');
+        }
+    });
+</script>
+{% endblock %}

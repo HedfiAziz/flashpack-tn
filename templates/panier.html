@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+{% block title %}Votre Panier | FlashPack TN{% endblock %}
+
+{% block content %}
+<div style="padding: 40px 5%; max-width: 1200px; margin: 0 auto;">
+    <h1 style="color: var(--flash-blue); margin-bottom: 30px;">🛒 Votre Panier Pro</h1>
+
+    <div class="panier-grid">
+        
+        <div style="background: white; border-radius: 20px; padding: 30px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+            {% if panier %}
+                {% for produit in panier %}
+                <div style="display: flex; align-items: center; gap: 20px; padding: 15px 0; border-bottom: 1px solid #eee;">
+                    <img src="{{ url_for('static', filename='images/' + produit.image) }}" style="width: 80px; height: 80px; object-fit: contain;">
+                    <div style="flex: 1;">
+                        <h3 style="margin: 0;">{{ produit.nom }}</h3>
+                        
+                        {% if produit.dimension %}
+                            <span style="display: inline-block; background: #e2e8f0; color: #475569; padding: 4px 10px; border-radius: 6px; font-size: 0.85rem; font-weight: bold; margin-right: 5px; margin-top: 5px;">
+                                📐 Taille : {{ produit.dimension }}
+                            </span>
+                        {% endif %}
+
+                        {% if produit.design_option and produit.design_option != 'Aucun' %}
+                            <span style="display: inline-block; background: #ffedd5; color: #c2410c; padding: 4px 10px; border-radius: 6px; font-size: 0.85rem; font-weight: bold; margin-top: 5px;">
+                                🎨 {{ produit.design_option }}
+                            </span>
+                        {% endif %}
+
+                        <p style="margin: 5px 0 0 0; color: #666; font-size: 0.9rem;">Quantité : {{ produit.quantite }}</p>
+                    </div>
+                    
+                    <div style="text-align: right;">
+                        <div style="font-weight: bold; font-size: 1.1rem; color: var(--flash-orange); margin-bottom: 8px;">
+                            {{ "%.3f"|format(produit.sous_total) }} DT
+                        </div>
+                        <a href="{{ url_for('retirer_du_panier', index=loop.index0) }}" style="color: #ef4444; text-decoration: none; font-size: 0.85rem; font-weight: bold; background: #fee2e2; padding: 5px 10px; border-radius: 6px;">
+                            ❌ Retirer
+                        </a>
+                    </div>
+                </div>
+                
+                {% endfor %}
+                <div style="margin-top: 20px;">
+                    <a href="/vider_panier" style="color: red; text-decoration: none; font-weight: bold;">🗑️ Vider tout le panier</a>
+                </div>
+            {% else %}
+                <div style="text-align: center; padding: 40px;">
+                    <h2>Votre panier est vide</h2>
+                    <a href="/boutique" style="display: inline-block; padding: 10px 20px; background: var(--flash-blue); color: white; text-decoration: none; border-radius: 8px;">Retour à la boutique</a>
+                </div>
+            {% endif %}
+        </div>
+
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+            
+            <div style="background: #0f172a; border-radius: 20px; padding: 30px; color: white;">
+                <h2 style="margin-top: 0; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 10px;">Résumé</h2>
+                
+                <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                    <span>Sous-total HT</span> <span>{{ "%.3f"|format(total_ht) }} DT</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-bottom: 15px;">
+                    <span>TVA (19%)</span> <span>{{ "%.3f"|format(tva) }} DT</span>
+                </div>
+                <div style="display: flex; justify-content: space-between; font-size: 1.3rem; font-weight: bold; margin-bottom: 10px; color: var(--flash-orange);">
+                    <span>Total TTC</span> <span>{{ "%.3f"|format(total_ttc) }} DT</span>
+                </div>
+            </div>
+
+            {% if panier %}
+            <div style="background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05);">
+                <h2 style="margin-top: 0; color: #0f172a; font-size: 1.4rem;">Validation</h2>
+                
+                {% if session.get('nom') %}
+                    <div style="background: #f8fafc; padding: 20px; border-radius: 15px; border: 1px solid #e2e8f0; margin-bottom: 20px;">
+                        <h3 style="margin-top: 0; color: #1e293b; font-size: 1rem;">📍 Expédié à :</h3>
+                        <p style="margin: 5px 0; color: #475569; font-size: 0.9rem;"><strong>{{ session.nom }}</strong></p>
+                        <p style="margin: 5px 0; color: #475569; font-size: 0.9rem;">📞 {{ session.tel }}</p>
+                        <p style="margin: 5px 0; color: #475569; font-size: 0.9rem;">🏠 {{ session.adresse }}</p>
+                        
+                        <a href="/compte" style="color: var(--flash-orange); text-decoration: none; font-weight: bold; font-size: 0.8rem; display: inline-block; margin-top: 10px;">
+                            ✏️ Modifier les infos
+                        </a>
+                    </div>
+                    
+                    <form action="/valider_commande" method="POST">
+                        <button type="submit" style="width: 100%; background: #0f172a; color: white; border: none; padding: 18px; border-radius: 12px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: 0.3s;" onmouseover="this.style.background='var(--flash-orange)'" onmouseout="this.style.background='#0f172a'">
+                            ✅ Confirmer la commande
+                        </button>
+                    </form>
+                    
+                {% else %}
+                    <div style="text-align: center; padding: 20px; background: #fff7ed; border-radius: 15px; border: 1px dashed #fdba74;">
+    <p style="color: #ea580c; font-weight: bold; margin-bottom: 20px; font-size: 0.9rem;">
+        ⚠️ Connectez-vous pour valider la livraison.
+    </p>
+    <a href="/compte" style="display: block; width: 100%; background: var(--flash-orange); color: white; text-decoration: none; padding: 15px 0; border-radius: 12px; font-size: 1rem; font-weight: bold; transition: 0.3s; box-sizing: border-box;">
+        📝 Se connecter
+    </a>
+</div>
+                {% endif %}
+            </div>
+            {% endif %}
+        </div>
+
+    </div>
+</div>
+{% endblock %}

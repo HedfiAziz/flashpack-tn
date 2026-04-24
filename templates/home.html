@@ -1,0 +1,451 @@
+{% extends "base.html" %}
+
+{% block title %}FlashPack TN | Emballage E-commerce & Doypack{% endblock %}
+
+{% block content %}
+
+<style>
+    /* --- VARIABLES & ANIMATIONS --- */
+    :root {
+        --text-main: #0f172a;
+        --text-muted: #64748b;
+        --bg-light: #f0f7fa; 
+        --bg-white: #ffffff;
+        --border-soft: #e2e8f0;
+        --flash-orange: #f97316; 
+        --flash-blue: #0f172a;   
+        
+        /* Nouvelles variables pour le Hero 2 colonnes */
+        --hero-bg: #f8fafc;
+        --text-dark: #1e293b;
+        --text-gray: #475569;
+        --orange-brand: #f97316;
+        --orange-hover: #ea580c;
+        --dark-btn: #334155;
+        --dark-btn-hover: #1e293b;
+    }
+
+    @keyframes fadeUpIn {
+        0% { opacity: 0; transform: translateY(30px); }
+        100% { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes scrollLeft {
+        0% { transform: translateX(0); }
+        100% { transform: translateX(-50%); }
+    }
+
+    @keyframes floatSoft {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-12px); }
+    }
+
+    /* --- NOUVEAU HERO SECTION (2 COLONNES) --- */
+    .hero-section {
+        background-color: var(--hero-bg);
+        padding: 80px 5%;
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .hero-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 60px;
+        position: relative;
+        z-index: 2;
+    }
+
+    /* Colonne Gauche */
+    .hero-content {
+        flex: 1;
+        max-width: 600px;
+        animation: fadeUpIn 0.8s ease-out forwards;
+    }
+
+    .badge-leader {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        background: linear-gradient(135deg, #f97316, #ea580c);
+        color: white;
+        padding: 8px 20px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 0.95rem;
+        margin-bottom: 30px;
+        box-shadow: 0 8px 20px rgba(249, 115, 22, 0.25);
+    }
+
+    .hero-title {
+        font-size: clamp(2.5rem, 4vw, 4rem);
+        line-height: 1.1;
+        font-weight: 900;
+        color: var(--text-dark);
+        margin-bottom: 25px;
+        letter-spacing: -1px;
+    }
+
+    .hero-title .text-orange {
+        color: var(--orange-brand);
+    }
+
+    .hero-description {
+        font-size: 1.15rem;
+        color: var(--text-gray);
+        line-height: 1.6;
+        margin-bottom: 40px;
+        max-width: 90%;
+    }
+
+    .hero-buttons {
+        display: flex;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .btn-orange {
+        background-color: var(--orange-brand);
+        color: white;
+        padding: 16px 32px;
+        border-radius: 50px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 25px rgba(249, 115, 22, 0.3);
+    }
+
+    .btn-orange:hover {
+        background-color: var(--orange-hover);
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(249, 115, 22, 0.4);
+    }
+
+    .btn-dark {
+        background-color: var(--dark-btn);
+        color: white;
+        padding: 16px 32px;
+        border-radius: 50px;
+        font-weight: 700;
+        text-decoration: none;
+        transition: all 0.3s ease;
+    }
+
+    .btn-dark:hover {
+        background-color: var(--dark-btn-hover);
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(51, 65, 85, 0.3);
+    }
+
+    /* Colonne Droite */
+    .hero-image-wrapper {
+        flex: 1;
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        animation: floatSoft 6s ease-in-out infinite;
+    }
+
+    .hero-main-img {
+        width: 100%;
+        max-width: 550px;
+        object-fit: contain;
+        mix-blend-mode: darken; 
+    }
+
+    .floating-quality-badge {
+        position: absolute;
+        bottom: 15%;
+        left: -5%;
+        background: white;
+        padding: 15px 25px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+        border: 1px solid rgba(0,0,0,0.03);
+        z-index: 10;
+    }
+
+    .floating-quality-badge .icon-box {
+        font-size: 1.8rem;
+    }
+
+    .floating-quality-badge .text-box strong {
+        display: block;
+        color: var(--text-dark);
+        font-weight: 800;
+        font-size: 1.1rem;
+        line-height: 1.2;
+    }
+
+    .floating-quality-badge .text-box span {
+        color: var(--text-gray);
+        font-size: 0.85rem;
+    }
+
+    /* Responsive Hero */
+    @media (max-width: 992px) {
+        .hero-container {
+            flex-direction: column;
+            text-align: center;
+            gap: 40px;
+        }
+        
+        .hero-description {
+            margin: 0 auto 40px auto;
+        }
+
+        .hero-buttons {
+            justify-content: center;
+        }
+
+        .floating-quality-badge {
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: -20px;
+        }
+    }
+
+    /* --- BOUTONS BENTO GRID (GARDÉS DE L'ANCIEN CODE) --- */
+    .btn-premium {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: var(--flash-orange);
+        color: white;
+        padding: 16px 40px;
+        border-radius: 100px;
+        font-weight: 800;
+        font-size: 1.1rem;
+        text-decoration: none;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 10px 25px rgba(230, 126, 34, 0.3);
+        border: 2px solid transparent;
+    }
+
+    .btn-premium:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 15px 35px rgba(230, 126, 34, 0.4);
+        background: #d35400;
+    }
+
+    .btn-outline {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        background: transparent;
+        color: var(--text-main);
+        padding: 16px 40px;
+        border-radius: 100px;
+        font-weight: 700;
+        font-size: 1.1rem;
+        text-decoration: none;
+        border: 2px solid var(--flash-blue);
+        transition: all 0.3s ease;
+    }
+
+    .btn-outline:hover {
+        background: var(--flash-blue);
+        color: white;
+    }
+
+    /* --- BENTO GRID ULTRA PREMIUM --- */
+    .bento-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        grid-auto-rows: minmax(320px, auto); 
+        gap: 25px; 
+        max-width: 1200px;
+        margin: 0 auto;
+    }
+
+    .bento-item {
+        background: var(--bg-white);
+        border-radius: 24px; 
+        padding: 40px; 
+        border: 1px solid rgba(0,0,0,0.04);
+        position: relative;
+        overflow: hidden;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 10px 30px rgba(0,0,0,0.02);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .bento-item:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 25px 50px rgba(0,0,0,0.08);
+        border-color: rgba(30, 58, 138, 0.2); 
+    }
+
+    .bento-large { grid-column: span 2; grid-row: span 2; }
+    .bento-tall  { grid-column: span 1; grid-row: span 2; }
+    .bento-small { grid-column: span 1; grid-row: span 1; padding: 30px; } 
+    .bento-full  { grid-column: span 3; grid-row: span 1; }
+
+    .img-blend {
+        mix-blend-mode: darken; 
+        transition: transform 0.6s ease;
+    }
+    
+    .bento-item:hover .img-blend {
+        transform: scale(1.08);
+    }
+
+    .bento-badge {
+        background: white; 
+        color: var(--flash-blue); 
+        padding: 6px 16px; 
+        border-radius: 8px; 
+        font-size: 0.85rem; 
+        font-weight: 800; 
+        display: inline-block; 
+        margin-bottom: 20px; 
+        box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    }
+
+    @media (max-width: 900px) {
+        .bento-grid {
+            grid-template-columns: 1fr;
+            grid-auto-rows: auto;
+        }
+        .bento-large, .bento-tall, .bento-small, .bento-full {
+            grid-column: span 1;
+            grid-row: auto;
+            min-height: 300px;
+        }
+    }
+</style>
+
+<section class="hero-section">
+    <div class="hero-container">
+        
+        <div class="hero-content">
+            <div class="badge-leader">
+                <span>🚀</span> Leader de l'emballage en Tunisie
+            </div>
+            
+            <h1 class="hero-title">
+                Mettez en valeur vos produits avec <span class="text-orange">FlashPack.</span>
+            </h1>
+            
+            <p class="hero-description">
+                Fini les colis abîmés et l'image de marque négligée. FlashPack transforme vos expéditions en une expérience client premium.
+            </p>
+            
+            <div class="hero-buttons">
+                <a href="/boutique" class="btn-orange">Découvrir nos solutions</a>
+                <a href="/compte" class="btn-dark">Espace Client</a>
+            </div>
+        </div>
+
+        <div class="hero-image-wrapper">
+            <div class="floating-quality-badge">
+                <div class="icon-box">📦</div>
+                <div class="text-box">
+                    <strong>Qualité Premium</strong>
+                    <span>Double cannelure & Kraft</span>
+                </div>
+            </div>
+            
+            <img src="{{ url_for('static', filename='images/doyys.jpg') }}" 
+                 onerror="this.src='https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=800&auto=format&fit=crop';" 
+                 class="hero-main-img" 
+                 alt="Sachets Doypack FlashPack">
+        </div>
+
+    </div>
+</section>
+
+<div style="background: white; border-bottom: 1px solid var(--border-soft); padding: 25px 0; overflow: hidden; display: flex; white-space: nowrap;">
+    <div style="animation: scrollLeft 25s linear infinite; display: inline-block; font-weight: 800; font-size: 1.1rem; color: var(--flash-blue);">
+        &nbsp;&nbsp; Caisses Américaines&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;Sachets Doypack&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp; Étiquettes Personnalisées&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;Sacs Kraft&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp; Film Étirable&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp; Caisses Américaines&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp; Sachets Doypack&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp; Étiquettes Personnalisées&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp; Sacs Kraft&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp; Film Étirable&nbsp;&nbsp;
+    </div>
+</div>
+
+<div style="background: #fcfdfd; padding: 100px 5%;"> 
+    <div style="max-width: 1200px; margin: 0 auto;">
+        
+        <div style="text-align: center; margin-bottom: 70px;">
+            <h2 style="font-size: 3rem; font-weight: 900; color: var(--text-main); margin-bottom: 20px; letter-spacing: -1px;">Nos solutions d'emballage</h2>
+            <p style="font-size: 1.2rem; color: var(--text-muted); max-width: 650px; margin: 0 auto; line-height: 1.6;">Trouvez l'emballage parfait pour votre secteur d'activité : cosmétique, alimentaire, textile ou e-commerce classique.</p>
+        </div>
+
+        <div class="bento-grid">
+            
+            <div class="bento-item bento-large" style="background: #f1f5f9; justify-content: space-between;">
+                <div>
+                    <div class="bento-badge">Le Classique E-commerce</div>
+                    <h3 style="font-size: 2.6rem; font-weight: 900; color: var(--text-main); margin-bottom: 15px; letter-spacing: -1px;">Caisse Américaine</h3>
+                    <p style="color: var(--text-muted); font-size: 1.15rem; max-width: 80%;">Carton simple ou double cannelure. La protection ultime et robuste pour toutes vos expéditions.</p>
+                </div>
+                <div style="flex-grow: 1; display: flex; align-items: flex-end; justify-content: flex-end; margin-top: 30px;">
+                    <img src="{{ url_for('static', filename='images/caisse_americaine.jpeg') }}" onerror="this.src='https://images.unsplash.com/photo-1605600659908-0ef719419d41?q=80&w=800&auto=format&fit=crop';" class="img-blend" style="width: 85%; max-height: 350px; object-fit: contain;" alt="Caisse américaine">
+                </div>
+            </div>
+
+            <div class="bento-item bento-tall" style="background: #f8fafc; justify-content: flex-start;">
+                <div style="margin-bottom: 30px;">
+                    <h3 style="font-size: 2rem; font-weight: 900; color: var(--text-main); margin-bottom: 12px; line-height: 1.1;">Sachets Doypack</h3>
+                    <p style="color: var(--text-muted); font-size: 1.05rem;">Idéal pour l'alimentaire et les cosmétiques. Zip refermable, design premium.</p>
+                </div>
+                <div style="flex-grow: 1; display: flex; align-items: center; justify-content: center;">
+                    <img src="{{ url_for('static', filename='images/hero_packaging.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1584916201218-f4242ceb4809?q=80&w=600&auto=format&fit=crop';" class="img-blend" style="width: 100%; object-fit: contain;" alt="Sachets Doypack">
+                </div>
+            </div>
+
+            <div class="bento-item bento-small" style="background: #f1f5f9; justify-content: space-between;">
+                <div style="margin-bottom: 20px;">
+                    <h3 style="font-size: 1.6rem; font-weight: 800; color: var(--text-main); margin-bottom: 8px;">Film Étirable</h3>
+                    <p style="font-size: 0.95rem; color: var(--text-muted); line-height: 1.5;">Solution polyvalente pour sécuriser vos palettes et colis volumineux.</p>
+                </div>
+                <div style="display: flex; justify-content: center; align-items: flex-end; height: 120px;">
+                    <img src="{{ url_for('static', filename='images/ww.png') }}" onerror="this.src='https://images.unsplash.com/photo-1622295023576-e4ef68e80ba5?q=80&w=400&auto=format&fit=crop';" class="img-blend" style="max-height: 100%; max-width: 100%; object-fit: contain;" alt="Film Étirable">
+                </div>
+            </div>
+
+            <div class="bento-item bento-small" style="background: #fff7ed; border: none; justify-content: space-between;">
+                <div style="margin-bottom: 20px;">
+                    <h3 style="font-size: 1.6rem; font-weight: 800; color: #ea580c; margin-bottom: 8px;">Scotch </h3>
+                    <p style="color: #c2410c; font-size: 0.95rem; line-height: 1.5;">Scellez vos envois avec votre logo. L'atout marque indispensable.</p>
+                </div>
+                <div style="display: flex; justify-content: center; align-items: flex-end; height: 120px;">
+                    <img src="{{ url_for('static', filename='images/sc.jpg') }}" onerror="this.src='https://images.unsplash.com/photo-1589939705384-5185137a7f0f?q=80&w=400&auto=format&fit=crop';" class="img-blend" style="max-height: 100%; max-width: 100%; object-fit: contain;" alt="Scotch Personnalisé">
+                </div>
+            </div>
+
+            <div class="bento-item bento-small" style="background: var(--flash-blue); color: white; display: flex; flex-direction: column; justify-content: space-between;">
+                <div>
+                    <div style="background: rgba(255,255,255,0.15); width: 60px; height: 60px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
+                        <span style="font-size: 1.8rem;">🏷️</span>
+                    </div>
+                    <h3 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 10px;">Stickers & Tags</h3>
+                    <p style="font-size: 0.95rem; opacity: 0.85; line-height: 1.5;">La touche finale pour parfaire votre unboxing experience et fidéliser.</p>
+                </div>
+            </div>
+
+            <div class="bento-item bento-full" style="background: var(--text-main); color: white; display: flex; flex-direction: row; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 30px; padding: 50px;">
+                <div style="flex: 1; min-width: 300px;">
+                    <h3 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 15px; letter-spacing: -0.5px;">Prêt à expédier ?</h3>
+                    <p style="color: #94a3b8; font-size: 1.2rem; max-width: 700px;">Découvrez notre catalogue complet avec nos tarifs revendeurs exclusifs. Un emballage parfait vous attend en quelques clics.</p>
+                </div>
+                <a href="/boutique" class="btn-premium" style="background: white; color: var(--text-main); box-shadow: 0 10px 20px rgba(255,255,255,0.1);">
+                    Voir le catalogue complet
+                </a>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}

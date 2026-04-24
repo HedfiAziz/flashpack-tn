@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="container" style="padding: 40px 20px;">
+    <h2 style="color: var(--flash-blue); text-align: center; margin-bottom: 30px;">{{ action }} un Produit</h2>
+
+    <div style="max-width: 600px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+        <form method="POST">
+            
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: bold; display: block; margin-bottom: 5px;">Nom du produit :</label>
+                <input type="text" name="nom" value="{{ produit.nom if produit else '' }}" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: bold; display: block; margin-bottom: 5px;">Description courte :</label>
+                <textarea name="description" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;">{{ produit.description if produit else '' }}</textarea>
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: bold; display: block; margin-bottom: 5px;">Détails (ex: Épaisseur, Matière) :</label>
+                <input type="text" name="details" value="{{ produit.details if produit else '' }}" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
+            </div>
+
+            <div style="display: flex; gap: 15px; margin-bottom: 15px;">
+                <div style="flex: 1;">
+                    <label style="font-weight: bold; display: block; margin-bottom: 5px;">Prix unitaire par défaut (DT) :</label>
+                    <input type="number" step="0.001" name="prix" value="{{ produit.prix_raw if produit else '' }}" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
+                </div>
+                <div style="flex: 1;">
+                    <label style="font-weight: bold; display: block; margin-bottom: 5px;">Stock actuel :</label>
+                    <input type="number" name="stock" value="{{ produit.stock if produit else '100' }}" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
+                </div>
+            </div>
+
+            <div style="margin-bottom: 15px; background: #f8fafc; padding: 15px; border-radius: 8px; border-left: 4px solid var(--flash-blue);">
+                <label style="font-weight: bold; display: block; margin-bottom: 5px;">Dimensions et Prix variables :</label>
+                <p style="font-size: 0.8rem; color: #64748b; margin-top: 0; margin-bottom: 10px;">Format exact obligatoire 👉 Taille:Prix, Taille:Prix <br> <i>Exemple : 4x6:0.050, 10x15:0.100, 20x30:0.250</i></p>
+                <input type="text" name="dimensions" value="{{ produit.dimensions if produit and produit.dimensions else '' }}" placeholder="Ex: 10x15:0.500, 15x20:0.850" style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
+            </div>
+
+            <div style="margin-bottom: 15px;">
+                <label style="font-weight: bold; display: block; margin-bottom: 5px;">Nom de l'image (ex: scotch.jpg) :</label>
+                <input type="text" name="image" value="{{ produit.image if produit else '' }}" required style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid #ccc;">
+            </div>
+
+            <div style="margin-bottom: 25px; background: #fff7ed; padding: 15px; border-radius: 8px; border: 1px dashed #fb923c;">
+                <label style="cursor: pointer; font-weight: bold; color: #9a3412; display: flex; align-items: center; gap: 10px;">
+                    <input type="checkbox" name="perso" style="width: 20px; height: 20px;" {% if produit and produit.est_personnalisable %}checked{% endif %}>
+                    Activer l'option "Design Personnalisé" pour ce produit
+                </label>
+            </div>
+
+            <button type="submit" class="btn" style="width: 100%; background: var(--flash-blue); color: white; padding: 15px; font-size: 1.1rem; border-radius: 10px; border: none; cursor: pointer;">
+                Enregistrer le produit
+            </button>
+            <a href="/admin" style="display: block; text-align: center; margin-top: 15px; color: #64748b; text-decoration: none;">Annuler</a>
+        </form>
+    </div>
+</div>
+{% endblock %}

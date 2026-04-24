@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<div style="min-height: 80vh; display: flex; align-items: center; justify-content: center; padding: 20px;">
+    <div style="background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 500px; width: 100%;">
+        <h2 style="color: var(--flash-orange);">Rejoignez FlashPack TN 🚀</h2>
+        <p>Créez votre profil pour commander en un clic.</p>
+
+        {% if erreur %}
+            <p style="color: #ef4444; background: #fee2e2; padding: 10px; border-radius: 8px; font-size: 0.9rem; text-align: center; font-weight: bold;">
+                ⚠️ {{ erreur }}
+            </p>
+        {% endif %}
+
+        <form action="/finaliser_inscription" method="POST">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                <div>
+                    <label>Nom / Société</label>
+                    <input type="text" name="nom" required minlength="3" maxlength="100" placeholder="Ex: FlashPack" style="width:100%; padding:10px; margin-top:5px; border-radius:8px; border:1px solid #ccc; box-sizing: border-box;">
+                </div>
+                <div>
+                    <label>Téléphone</label>
+                    <input type="tel" name="tel" required pattern="[0-9]{8}" maxlength="8" title="Veuillez entrer un numéro de téléphone à 8 chiffres (ex: 99999999)" placeholder="Ex: 99999999" style="width:100%; padding:10px; margin-top:5px; border-radius:8px; border:1px solid #ccc; box-sizing: border-box;">
+                </div>
+            </div>
+
+            <label style="display: block; margin-top: 15px;">Adresse de livraison complète</label>
+            <textarea name="adresse" required minlength="10" placeholder="Ex: 15 Avenue Habib Bourguiba, 1001 Tunis..." style="width:100%; padding:10px; margin-top:5px; border-radius:8px; border:1px solid #ccc; height: 60px; box-sizing: border-box;"></textarea>
+
+            <label style="display: block; margin-top: 15px;">Choisissez un mot de passe</label>
+            <input type="password" name="mdp" required minlength="6" placeholder="Minimum 6 caractères" style="width:100%; padding:10px; margin-top:5px; border-radius:8px; border:1px solid #ccc; box-sizing: border-box;">
+
+            <button type="submit" style="width:100%; margin-top:30px; background: #0f172a; color:white; padding:15px; border:none; border-radius:10px; cursor:pointer; font-weight: bold;">
+                Créer mon compte
+            </button>
+            
+            <p style="text-align: center; margin-top: 20px; font-size: 0.9rem;">
+                Déjà inscrit ? <a href="/compte" style="color: var(--flash-blue); font-weight: bold;">Se connecter</a>
+            </p>
+        </form>
+    </div>
+</div>
+{% endblock %}
