@@ -111,14 +111,21 @@
         flex-wrap: wrap;
     }
 
-    .btn-orange {
-        background-color: var(--orange-brand);
-        color: white;
+    .btn-orange, .btn-dark, .btn-premium, .btn-outline {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
         padding: 16px 32px;
         border-radius: 50px;
         font-weight: 700;
         text-decoration: none;
         transition: all 0.3s ease;
+        text-align: center;
+    }
+
+    .btn-orange {
+        background-color: var(--orange-brand);
+        color: white;
         box-shadow: 0 10px 25px rgba(249, 115, 22, 0.3);
     }
 
@@ -131,11 +138,6 @@
     .btn-dark {
         background-color: var(--dark-btn);
         color: white;
-        padding: 16px 32px;
-        border-radius: 50px;
-        font-weight: 700;
-        text-decoration: none;
-        transition: all 0.3s ease;
     }
 
     .btn-dark:hover {
@@ -193,73 +195,7 @@
         font-size: 0.85rem;
     }
 
-    /* Responsive Hero */
-    @media (max-width: 992px) {
-        .hero-container {
-            flex-direction: column;
-            text-align: center;
-            gap: 40px;
-        }
-        
-        .hero-description {
-            margin: 0 auto 40px auto;
-        }
-
-        .hero-buttons {
-            justify-content: center;
-        }
-
-        .floating-quality-badge {
-            left: 50%;
-            transform: translateX(-50%);
-            bottom: -20px;
-        }
-    }
-
-    /* --- BOUTONS BENTO GRID (GARDÉS DE L'ANCIEN CODE) --- */
-    .btn-premium {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        background: var(--flash-orange);
-        color: white;
-        padding: 16px 40px;
-        border-radius: 100px;
-        font-weight: 800;
-        font-size: 1.1rem;
-        text-decoration: none;
-        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        box-shadow: 0 10px 25px rgba(230, 126, 34, 0.3);
-        border: 2px solid transparent;
-    }
-
-    .btn-premium:hover {
-        transform: translateY(-4px);
-        box-shadow: 0 15px 35px rgba(230, 126, 34, 0.4);
-        background: #d35400;
-    }
-
-    .btn-outline {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        background: transparent;
-        color: var(--text-main);
-        padding: 16px 40px;
-        border-radius: 100px;
-        font-weight: 700;
-        font-size: 1.1rem;
-        text-decoration: none;
-        border: 2px solid var(--flash-blue);
-        transition: all 0.3s ease;
-    }
-
-    .btn-outline:hover {
-        background: var(--flash-blue);
-        color: white;
-    }
-
-    /* --- BENTO GRID ULTRA PREMIUM --- */
+    /* --- BENTO GRID --- */
     .bento-grid {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
@@ -314,15 +250,107 @@
         box-shadow: 0 4px 10px rgba(0,0,0,0.05);
     }
 
-    @media (max-width: 900px) {
+    /* --- OPTIMISATION MOBILE EXTRÊME (iPhone 4 / Petits écrans) --- */
+    @media (max-width: 992px) {
+        .hero-section {
+            padding: 40px 5%; /* Marges réduites */
+            min-height: auto;
+        }
+        .hero-container {
+            flex-direction: column;
+            text-align: center;
+            gap: 30px;
+        }
+        .hero-title {
+            font-size: clamp(2rem, 8vw, 3rem); /* Titre fluide plus petit */
+        }
+        .hero-description {
+            font-size: 1rem;
+            margin: 0 auto 30px auto;
+            max-width: 100%;
+        }
+        .badge-leader {
+            font-size: 0.85rem;
+            padding: 6px 15px;
+        }
+        .hero-buttons {
+            flex-direction: column; /* Boutons empilés */
+            gap: 15px;
+            width: 100%;
+        }
+        .btn-orange, .btn-dark {
+            width: 100%; /* Boutons pleine largeur pour le pouce */
+            padding: 14px 20px;
+        }
+        .hero-main-img {
+            max-width: 85%; /* Image adaptée */
+        }
+        .floating-quality-badge {
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: -15px;
+            width: 90%; /* S'adapte à l'écran */
+            justify-content: center;
+            padding: 10px;
+        }
+        .floating-quality-badge .icon-box {
+            font-size: 1.5rem;
+        }
+        .floating-quality-badge .text-box strong {
+            font-size: 0.9rem;
+        }
+    }
+
+    @media (max-width: 768px) {
         .bento-grid {
             grid-template-columns: 1fr;
             grid-auto-rows: auto;
+            gap: 15px;
         }
         .bento-large, .bento-tall, .bento-small, .bento-full {
             grid-column: span 1;
             grid-row: auto;
-            min-height: 300px;
+            min-height: 250px;
+            padding: 20px !important; /* Marges internes réduites pour mobile */
+        }
+        /* Ajustements des textes inline via !important pour forcer la fluidité */
+        h2[style*="font-size: 3rem"] {
+            font-size: 1.8rem !important; 
+            margin-bottom: 10px !important;
+        }
+        p[style*="font-size: 1.2rem"] {
+            font-size: 1rem !important;
+        }
+        .bento-item h3 {
+            font-size: 1.4rem !important;
+        }
+        .bento-item p {
+            font-size: 0.9rem !important;
+            max-width: 100% !important;
+        }
+        /* Conteneur principal de la grille */
+        div[style*="padding: 100px 5%"] {
+            padding: 40px 5% !important;
+        }
+        /* Section pleine largeur "Prêt à expédier" */
+        .bento-full {
+            flex-direction: column !important;
+            text-align: center;
+            gap: 20px !important;
+        }
+        .btn-premium {
+            width: 100%;
+            padding: 14px 20px;
+        }
+        /* Ajustement de la bannière défilante */
+        div[style*="animation: scrollLeft"] {
+            font-size: 0.85rem !important;
+        }
+        /* Réduction des images dans les cases Bento */
+        .img-blend {
+            max-height: 180px !important;
+            width: 100% !important;
+            object-fit: contain;
         }
     }
 </style>
@@ -367,7 +395,8 @@
     </div>
 </section>
 
-<div style="background: white; border-bottom: 1px solid var(--border-soft); padding: 25px 0; overflow: hidden; display: flex; white-space: nowrap;">
+<!-- Bannière défilante -->
+<div style="background: white; border-bottom: 1px solid var(--border-soft); padding: 20px 0; overflow: hidden; display: flex; white-space: nowrap;">
     <div style="animation: scrollLeft 25s linear infinite; display: inline-block; font-weight: 800; font-size: 1.1rem; color: var(--flash-blue);">
         &nbsp;&nbsp; Caisses Américaines&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;Sachets Doypack&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp; Étiquettes Personnalisées&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp;Sacs Kraft&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp; Film Étirable&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp; Caisses Américaines&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp; Sachets Doypack&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp; Étiquettes Personnalisées&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp; Sacs Kraft&nbsp;&nbsp;&nbsp;&nbsp;•&nbsp;&nbsp;&nbsp;&nbsp; Film Étirable&nbsp;&nbsp;
     </div>
@@ -426,8 +455,8 @@
 
             <div class="bento-item bento-small" style="background: var(--flash-blue); color: white; display: flex; flex-direction: column; justify-content: space-between;">
                 <div>
-                    <div style="background: rgba(255,255,255,0.15); width: 60px; height: 60px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 20px;">
-                        <span style="font-size: 1.8rem;">🏷️</span>
+                    <div style="background: rgba(255,255,255,0.15); width: 50px; height: 50px; border-radius: 16px; display: flex; align-items: center; justify-content: center; margin-bottom: 15px;">
+                        <span style="font-size: 1.5rem;">🏷️</span>
                     </div>
                     <h3 style="font-size: 1.6rem; font-weight: 800; margin-bottom: 10px;">Stickers & Tags</h3>
                     <p style="font-size: 0.95rem; opacity: 0.85; line-height: 1.5;">La touche finale pour parfaire votre unboxing experience et fidéliser.</p>
@@ -435,9 +464,9 @@
             </div>
 
             <div class="bento-item bento-full" style="background: var(--text-main); color: white; display: flex; flex-direction: row; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 30px; padding: 50px;">
-                <div style="flex: 1; min-width: 300px;">
+                <div style="flex: 1; min-width: 250px;">
                     <h3 style="font-size: 2.5rem; font-weight: 800; margin-bottom: 15px; letter-spacing: -0.5px;">Prêt à expédier ?</h3>
-                    <p style="color: #94a3b8; font-size: 1.2rem; max-width: 700px;">Découvrez notre catalogue complet avec nos tarifs revendeurs exclusifs. Un emballage parfait vous attend en quelques clics.</p>
+                    <p style="color: #94a3b8; font-size: 1.1rem; max-width: 700px;">Découvrez notre catalogue complet avec nos tarifs revendeurs exclusifs. Un emballage parfait vous attend en quelques clics.</p>
                 </div>
                 <a href="/boutique" class="btn-premium" style="background: white; color: var(--text-main); box-shadow: 0 10px 20px rgba(255,255,255,0.1);">
                     Voir le catalogue complet
