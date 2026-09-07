@@ -1,5 +1,6 @@
-flask
-gunicorn
-flask_sqlalchemy
+Flask
+Flask-SQLAlchemy
+psycopg2-binary
 requests
 openpyxl
+gunicorn
